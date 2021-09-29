@@ -1,7 +1,9 @@
 import express from 'express';
 import config from 'config';
 import log from './logger';
-import connect from './db/connect';
+
+import connectDB from './db/connect';
+import authRoutes from './routes/auth';
 
 const app = express();
 
@@ -11,8 +13,10 @@ const HOST = config.get('HOST') as string;
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+app.use('/api/user', authRoutes);
+
 app.listen(PORT, HOST, () => {
   log.info(`Listening at http://${HOST}:${PORT}`);
 
-	connect();
+	connectDB();
 });
