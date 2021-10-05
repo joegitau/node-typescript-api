@@ -1,22 +1,26 @@
 import express from 'express';
 import config from 'config';
-import log from './logger';
 
-import connectDB from './db/connect';
+import log from './utils/logger';
+import connectDB from './utils/db/connect';
+import routes from './routes';
 import authRoutes from './routes/auth';
 
 const app = express();
 
-const PORT = config.get('PORT') as number;
-const HOST = config.get('HOST') as string;
+const PORT = config.get<number>('PORT');
+const HOST = config.get<string>('HOST');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.use('/api/user', authRoutes);
 
-app.listen(PORT, HOST, () => {
+app.listen(PORT, HOST, async () => {
   log.info(`Listening at http://${HOST}:${PORT}`);
 
-	connectDB();
+	// connect to MongoDB
+  await connectDB();
+  // call routes
+  routes(app);
 });
