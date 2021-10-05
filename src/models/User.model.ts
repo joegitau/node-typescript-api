@@ -1,7 +1,7 @@
 import { Schema, model, Document } from 'mongoose';
 import bcrypt from 'bcrypt';
 
-export interface IUser extends Document {
+export interface UserDocument extends Document {
 	email: string;
 	username: string;
 	password: string;
@@ -11,7 +11,7 @@ export interface IUser extends Document {
 	comparePassword(candidatePassword: string): Promise<boolean>;
 }
 
-const UserSchema = new Schema<IUser>(
+const UserSchema = new Schema<UserDocument>(
   {
     email: { type: String, required: true, unique: true },
     username: { type: String, required: true },
@@ -21,10 +21,10 @@ const UserSchema = new Schema<IUser>(
 );
 
 UserSchema.pre('save', async function(next) {
-	let user: IUser = this as IUser;
+	let user: UserDocument = this as UserDocument;
 
 	// hash password ONLY if new or modified
-	if (!user.isModified) return next();
+	if (!user.isModified('password')) return next();
 
 	const salt: string = await bcrypt.genSalt(10);
 	const hashedPassword: string = await bcrypt.hash(user.password, salt);
@@ -36,11 +36,11 @@ UserSchema.pre('save', async function(next) {
 });
 
 UserSchema.methods.comparePassword = async function(candidatePassword: string): Promise<boolean>{
-	const user = this as IUser;
+	const user = this as UserDocument;
 
 	return bcrypt.compare(candidatePassword, user.password).catch(err => false);
 }
 
-const User = model<IUser>("User", UserSchema);
+const User = model<UserDocument>("User", UserSchema);
 
 export default User;
