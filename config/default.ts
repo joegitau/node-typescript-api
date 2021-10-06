@@ -1,4 +1,13 @@
 export default {
-    PORT: 5000,
-    HOST: "localhost",
+	PORT: 5000,
+	HOST: "localhost",
+	ACCESS_TOKEN_EXPIRY: "15min",
+	REFRESH_TOKEN_EXPIRY: "1Y",
+	PUBLIC_KEY: `-----BEGIN PUBLIC KEY-----
+MIGeMA0GCSqGSIb3DQEBAQUAA4GMADCBiAKBgF5WagooW9Pqlqo4qO/FVRx7nEga
+inIxk7Y4nGUMYYvYkiETX/oj3XgfuM3rWedX0kUeI+oK4Pedw0cI1kuJb+Fnga8D
+KyUHcPJ6Tm/41LqFHtCBJWpxtiwgnbihxAy83e9olOXzMlcTwf09t6vYXOBjjRvx
+mOQbbkS68YCUaYfNAgMBAAE=
+-----END PUBLIC KEY-----`
+
 }
