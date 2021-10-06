@@ -8,7 +8,8 @@ import log from '../utils/logger';
 const createUserController = async (req: Request<{}, {}, CreateUserInput['body']>, res: Response) => {
   try {
     const user = await createUser(req.body);
-    return res.status(201).send(omit(user.toJSON(), 'password'));
+    
+    return res.status(201).json({user});
   } catch (e: any) {
     log.error(e.message);
 
