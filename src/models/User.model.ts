@@ -17,30 +17,30 @@ const UserSchema = new Schema<UserDocument>(
     username: { type: String, required: true },
     password: { type: String, required: true },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
-UserSchema.pre('save', async function(next) {
-	let user: UserDocument = this as UserDocument;
+UserSchema.pre('save', async function (next) {
+  const user: UserDocument = this as UserDocument;
 
-	// hash password ONLY if new or modified
-	if (!user.isModified('password')) return next();
+  // hash password ONLY if new or modified
+  if (!user.isModified('password')) return next();
 
-	const salt: string = await bcrypt.genSalt(10);
-	const hashedPassword: string = await bcrypt.hash(user.password, salt);
+  const salt: string = await bcrypt.genSalt(10);
+  const hashedPassword: string = await bcrypt.hash(user.password, salt);
 
-	// substitute password with hashedPassword
-	user.password = hashedPassword;
+  // substitute password with hashedPassword
+  user.password = hashedPassword;
 
-	return next();
+  return next();
 });
 
-UserSchema.methods.comparePassword = async function(candidatePassword: string): Promise<boolean>{
-	const user = this as UserDocument;
+UserSchema.methods.comparePassword = async function (candidatePassword: string): Promise<boolean> {
+  const user = this as UserDocument;
 
-	return bcrypt.compare(candidatePassword, user.password).catch(err => false);
-}
+  return bcrypt.compare(candidatePassword, user.password).catch((err) => false);
+};
 
-const User = model<UserDocument>("User", UserSchema);
+const User = model<UserDocument>('User', UserSchema);
 
 export default User;

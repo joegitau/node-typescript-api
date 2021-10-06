@@ -16,7 +16,7 @@ app.use(express.urlencoded({ extended: false }));
 app.listen(PORT, HOST, async () => {
   log.info(`Listening at http://${HOST}:${PORT}`);
 
-	// connect to MongoDB
+  // connect to MongoDB
   await connectDB();
   // call routes
   routes(app);
