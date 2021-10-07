@@ -3,17 +3,15 @@ import config from 'config';
 
 import { createSession } from "../services/session.service";
 import { validatePassword } from "../services/user.service";
-import { signJWT} from '../utils/jwt/index';
+import { signJWT } from '../utils/jwt/index';
 
 export const createSessionController = async (req: Request, res: Response) => {
   // validate user's password
 	const user = await validatePassword(req.body);
 
-	if(!user) {
-		return false 
-	} else {
-		res.status(401).json({ message: "Invalid password or email."});
-	}
+	if (!user) {
+		return res.status(401).json({ message: "Invalid password or email."});
+	} 
 
 	// create a session
 	const session = await createSession(user._id, req.get('user-agent') || '');
@@ -35,5 +33,5 @@ export const createSessionController = async (req: Request, res: Response) => {
 	);
 
 	// return access & refresh tokens
-	return res.json({ accessToken, refreshToken });
+	return res.status(200).json({ accessToken, refreshToken });
 }

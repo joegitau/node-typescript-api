@@ -4,7 +4,8 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const PRIVATE_KEY = process.env.PRIVATE_KEY as string;
+// const PRIVATE_KEY = process.env.PRIVATE_KEY as string;
+const PRIVATE_KEY = config.get<string>("PRIVATE_KEY");
 const PUBLIC_KEY = config.get<string>("PUBLIC_KEY");
 
 export const signJWT = (object: Object, options?: SignOptions | undefined) => {
@@ -29,7 +30,7 @@ export const verifyJWT = (token: string) => {
 	} catch (e: any) {
 		return { 
 			valid: false, 
-			expired: e.mesage === 'JWT is expired',
+			expired: e.mesage === 'JWT is expired.',
 			decoded: null
 		}
 	}
