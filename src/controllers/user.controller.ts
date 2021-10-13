@@ -1,5 +1,4 @@
 import { Request, Response } from 'express';
-import { omit } from 'lodash';
 
 import { createUser } from '../services/user.service';
 import { CreateUserInput } from '../schemas/user.schema';
@@ -9,11 +8,11 @@ const createUserController = async (req: Request<{}, {}, CreateUserInput['body']
   try {
     const user = await createUser(req.body);
     
-    return res.status(201).json({user});
+    return res.status(201).send(user);
   } catch (e: any) {
     log.error(e.message);
 
-    res.status(409).json({ error: e.message }); // CONFLICT ERROR: 409! -> likely duplicate emails
+    res.status(409).send(e.message); // CONFLICT ERROR: 409! -> likely duplicate emails
   }
 };
 

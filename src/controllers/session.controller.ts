@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import config from 'config';
 
-import { createSession } from "../services/session.service";
+import { createSession, findSessions } from "../services/session.service";
 import { validatePassword } from "../services/user.service";
 import { signJWT } from '../utils/jwt/index';
 
@@ -10,7 +10,7 @@ export const createSessionController = async (req: Request, res: Response) => {
 	const user = await validatePassword(req.body);
 
 	if (!user) {
-		return res.status(401).json({ message: "Invalid password or email."});
+		return res.status(401).send("Invalid password or email.");
 	} 
 
 	// create a session
@@ -33,5 +33,15 @@ export const createSessionController = async (req: Request, res: Response) => {
 	);
 
 	// return access & refresh tokens
-	return res.status(200).json({ accessToken, refreshToken });
+	return res.status(200).send({ accessToken, refreshToken });
+}
+
+export const getSessionsController = async (req: Request, res: Response) => {
+	// fetch the userId from res.locals object
+	const userId = res.locals.user._id;
+	
+	const sessions = await findSessions({ user: userId, valid: true });
+	console.log("sessions: ", sessions);
+
+	return res.status(200).send(sessions);
 }

@@ -2,7 +2,7 @@ import { Schema, Document, model } from "mongoose";
 
 import { UserDocument } from "./User.model";
 
-interface SessionDocumennt extends Document {
+export interface SessionDocumennt extends Document {
 	user: UserDocument['_id'];
 	valid: boolean;
 	userAgent: string;

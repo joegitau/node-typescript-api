@@ -12,6 +12,6 @@ export const validateResource = (schema: AnyZodObject) => (req: Request, res: Re
 
     next();
   } catch (e: any) {
-    return res.status(400).json({ error: e });
+    return res.status(400).send(e.message);
   }
 };
